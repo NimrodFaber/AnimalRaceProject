@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="animals.js"></script>
+    <title>Document</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+
+        }
+
+        div {
+            width: 100vw;
+            height: 131px;
+            border-bottom: 5px solid black;
+        }
+
+        #mainDiv {
+            background-color: cadetblue;
+            display: flex;
+            /* justify-content: center; */
+            align-items: center;
+        }
+
+        #resetButton {
+            background-color: rgb(68, 99, 156);
+            height: 100px;
+            width: 150px;
+            border-radius: 50%;
+            font-size: 30px;
+            margin-left: 50px;
+        }
+
+        #showDiv {
+            /* display: flex;
+            align-items: center; */
+            margin-left: 300px;
+            margin-top: 50px;
+            border-bottom: none;
+            width: 500px;
+        }
+
+        #playButton {
+            width: 150px;
+            height: 100px;
+            border-radius: 40%;
+            font-size: 40px;
+            background-color: darkgreen;
+            border: 5px solid white;
+        }
+
+        .readyDiv {
+            height: 100%;
+            width: 150px;
+            border-bottom: none;
+        }
+
+        select {
+            width: 150px;
+            height: 30px;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="mainDiv">
+        <button id="resetButton">Reset</button>
+        <div id="showDiv">
+            <label for="cars" style="font-size: 30px;padding-left: 20px;">Choose Animal :</label><br>
+            <select id="cars" name="cars" onchange="pushtoarr()";
+>
+                <option value="" selected disabled hidden>Choose here</option>
+                <option value="dog">Dog</option>
+                <option value="horse">Horse</option>
+                <option value="duck">Duck</option>
+                <option value="chick">Chick</option>
+            </select>
+            <!-- <input type="text"> -->
+            <button id="showButton" style="font-size: 20px;">Show</button>
+        </div>
+        <button id="playButton" style="font-size: 20px;">Race</button>
+
+    </div>
+    <div id="dog" style="position:relative;">
+        <div class="readyDiv"></div>
+
+    </div>
+    <div id="horse" style="position:relative;">
+        <div class="readyDiv"></div>
+
+    </div>
+    <div id="duck" style="position:relative;">
+        <div class="readyDiv"></div>
+
+
+    </div>
+    <div id="chick" style="position:relative;">
+        <div class="readyDiv"></div>
+    </div>
+    <script>
+        let arrAnimals=[]
+        function pushtoarr(){
+            if(!arrAnimals.includes(document.getElementById("cars").value)){
+
+  arrAnimals.push(document.getElementById("cars").value)
+            }
+
+      
+
+
+        }
+        document.getElementById("resetButton").addEventListener("click", function () {
+            clearAnimals();
+            let dogPic = document.createElement("img");
+            dogPic.style.width = "140px"
+            dogPic.style.height = "110px"
+            dogPic.id = "dog"
+            document.getElementById("dog").children[0].appendChild(dogPic);
+            dogPic.src = "/picZ/dog.gif"
+
+            let horsePic = document.createElement("img");
+            horsePic.style.width = "140px"
+            horsePic.style.height = "110px"
+            horsePic.id = "horse"
+            document.getElementById("horse").children[0].appendChild(horsePic);
+            horsePic.src = "/picZ/horse.gif"
+
+            let duckPic = document.createElement("img");
+            duckPic.style.width = "140px"
+            duckPic.style.height = "110px"
+            duckPic.id = "duck"
+            document.getElementById("duck").children[0].appendChild(duckPic);
+            duckPic.src = "/picZ/duck.gif"
+
+            let chickPic = document.createElement("img");
+            chickPic.style.width = "140px"
+            chickPic.style.height = "110px"
+            chickPic.id = "chick"
+            document.getElementById("chick").children[0].appendChild(chickPic);
+            chickPic.src = "/picZ/chick.gif"
+        });
+
+        function clearAnimals() {
+            let x = document.querySelectorAll("img");
+            for (let i = 0; i < x.length; i++) x[i].remove();
+        }
+        document.getElementById("showButton").addEventListener("click", function () {
+           clearAnimals() 
+           for(let i=0;i<arrAnimals.length;i++){
+            for (const animal in runners) {
+                let choosenAnimal = arrAnimals[i]
+                if (animal == choosenAnimal) {
+                    let animalPic = document.createElement("img");
+                    animalPic.style.width = "140px"
+                    animalPic.style.height = "110px"
+                    animalPic.id=choosenAnimal
+                    document.getElementById(`${choosenAnimal}`).children[0].appendChild(animalPic);
+                    // animalPic.src = `/picZ/${runners.dog.img}`
+                    animalPic.src = `/picZ/${choosenAnimal}.gif`
+                }
+
+            }}
+        });
+
+        document.getElementById("playButton").addEventListener("click", function () {
+            let imgCollection = document.querySelectorAll("img");
+            if (imgCollection.length < 2) {
+                switch (document.getElementById("cars").value) {
+                    case "dog":
+                        myMove(runners.dog, 0)
+                        break; 
+                    case "horse":
+                        myMove(runners.horse, 0)
+                       break; 
+                    case "duck":
+                        myMove(runners.duck, 0)
+                        break;
+                    case "chick":
+                        myMove(runners.chick, 0)
+                        break;
+                    default:
+                        text = "Looking forward to the Weekend";
+                }
+                 
+            } else {
+                for (let i = 0; i < imgCollection.length; i++) {
+                    for (const animal in runners) {
+                        if (imgCollection[i].id == animal) myMove(runners[animal], i)
+                    }
+                }
+            }
+
+        });
+
+        function myMove(getAnimal, i) {
+            let id = null;
+            var animalPicZ = document.querySelectorAll("img");
+            let elem = animalPicZ[i];
+            console.log(elem);
+            let pos = 0;
+            elem.style.position = "absolute"
+            clearInterval(id);
+            id = setInterval(frame, 10);
+
+            function frame() {
+                if (pos > window.screen.width - elem.width) {
+                    clearInterval(id);
+                } else {
+                    pos = pos + Math.floor(Math.random() * getAnimal.step / 10)
+                    elem.style.left = pos + 'px';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
